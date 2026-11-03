@@ -319,11 +319,21 @@ private int queueNumber = 1;
         jButton3.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jButton3.setForeground(new java.awt.Color(255, 255, 255));
         jButton3.setText("REMOVE SELECTED");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jButton4.setBackground(new java.awt.Color(153, 153, 255));
         jButton4.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jButton4.setForeground(new java.awt.Color(255, 255, 255));
         jButton4.setText("CLEAR QUEUE");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -480,6 +490,81 @@ Agetxt.setText("");
             "Now serving: " + patient.getName());
     // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+
+    int selectedRow = jTable2.getSelectedRow();
+
+    if (selectedRow == -1) {
+        javax.swing.JOptionPane.showMessageDialog(this,
+                "Please select a patient from the table.");
+        return;
+    }
+
+    if (selectedRow >= waitingQueue.size()) {
+        javax.swing.JOptionPane.showMessageDialog(this,
+                "Invalid selection.");
+        return;
+    }
+
+    java.util.Iterator<PatientQueueSystem.Patient> iterator =
+            waitingQueue.iterator();
+
+    int index = 0;
+
+    while (iterator.hasNext()) {
+        iterator.next();
+
+        if (index == selectedRow) {
+            iterator.remove();
+            break;
+        }
+
+        index++;
+    }
+
+    javax.swing.table.DefaultTableModel model =
+            (javax.swing.table.DefaultTableModel) jTable2.getModel();
+
+    model.removeRow(selectedRow);
+
+    jLabel6.setText(String.valueOf(waitingQueue.size()));
+
+    javax.swing.JOptionPane.showMessageDialog(this,
+            "Patient successfully removed from queue!");
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+
+    if (waitingQueue.isEmpty()) {
+        javax.swing.JOptionPane.showMessageDialog(this,
+                "The waiting queue is already empty.");
+        return;
+    }
+
+    int confirm = javax.swing.JOptionPane.showConfirmDialog(this,
+            "Are you sure you want to clear the entire queue?",
+            "Confirm Clear Queue",
+            javax.swing.JOptionPane.YES_NO_OPTION);
+
+    if (confirm == javax.swing.JOptionPane.YES_OPTION) {
+
+        waitingQueue.clear();
+
+        javax.swing.table.DefaultTableModel model =
+                (javax.swing.table.DefaultTableModel) jTable2.getModel();
+
+        model.setRowCount(0);
+
+        jLabel6.setText("0");
+        jLabel4.setText("NO PATIENT YET");
+
+        javax.swing.JOptionPane.showMessageDialog(this,
+                "Waiting queue successfully cleared!");
+    }
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * @param args the command line arguments
